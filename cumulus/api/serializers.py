@@ -17,7 +17,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     def validate_subscription_name(self, value):
         
-        if len(value) < 2:
+        if len(value) < 3:
             raise serializers.ValidationError("Name is too short")
     
         return value   
@@ -59,6 +59,14 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Frequency is not valid")
         
         return frequency
+    
+    def validate_category(self, category):
+        valid_categories = {"Entertainment & Media", "Transportation", "Health & Wellbeing", "Finance & Insurance", "Technology", "Utilities"}
+        
+        if category not in valid_categories:
+            raise serializers.ValidationError("Category does not currently exist")
+    
+        return category
 
     # def validate_discretionary(self, discretionary):
         

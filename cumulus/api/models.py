@@ -13,6 +13,7 @@ class Subscription(models.Model):
     payment_method = models.CharField(max_length=200)
     category = models.CharField(max_length=200)
     cancellation_url = models.URLField(max_length=200, blank=True)
+    company_logo_url = models.URLField(max_length=200, blank=True)
     
     def __str__(self):
         return self.subscription_name
