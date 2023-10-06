@@ -15,7 +15,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         
         return data
 
-    def validate_name(self, value):
+    def validate_subscription_name(self, value):
         
         if len(value) < 2:
             raise serializers.ValidationError("Name is too short")

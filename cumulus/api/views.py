@@ -19,7 +19,7 @@ class SubscriptionListAV(APIView):
             serializer.save()
             return Response(serializer.data)
         else: 
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 class SubscriptionDetailAV(APIView):
     def get(self, request, subscription_id):
