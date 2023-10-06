@@ -1,8 +1,15 @@
 from rest_framework import serializers
-from api.models import Subscription
+from api.models import Subscription, SubscriptionTransactionHistory
 from decimal import *
 
+class SubTransactionHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionTransactionHistory
+        fields = "__all__"
+
 class SubscriptionSerializer(serializers.ModelSerializer):
+    transaction_history = SubTransactionHistorySerializer(many=True)
+    
     class Meta:
         model = Subscription
         fields = "__all__"
@@ -88,3 +95,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError("Active field must be a boolean")
         
     #     return active
+

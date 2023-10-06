@@ -17,5 +17,15 @@ class Subscription(models.Model):
     
     def __str__(self):
         return self.subscription_name
+
+class SubscriptionTransactionHistory(models.Model):
+    subscription = models.ForeignKey(Subscription, related_name="transaction_history", on_delete=models.CASCADE)
     
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3)
+    date_paid = models.DateField()
+    
+    class Meta:
+        def __str__(self):
+            return '%d: %s' % (self.amount, self.date_paid)
 
