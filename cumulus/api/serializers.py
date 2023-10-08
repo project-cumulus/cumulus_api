@@ -5,15 +5,29 @@ from decimal import *
 class SubTransactionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionTransactionHistory
-        fields = "__all__"
-
-class SubscriptionSerializer(serializers.ModelSerializer):
-    transaction_history = SubTransactionHistorySerializer(many=True)
-    
+        fields = [
+            "amount", "currency", "date_paid"
+        ]
+        
+class CreateSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
-        fields = "__all__"
-        
+        fields = [
+            "id",
+            "subscription_name",
+            "description",
+            "active",
+            "fixed",
+            "discretionary", 
+            "currency",
+            "amount_per_frequency",
+            "frequency",
+            "frequency_detail",
+            "payment_method",
+            "category",
+            "cancellation_url",
+            "company_logo_url"
+        ]
     def validate(self, data):
         if data['subscription_name'] == data['description']:
             raise serializers.ValidationError(
@@ -74,7 +88,30 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Category does not currently exist")
     
         return category
-
+    
+class SubscriptionSerializer(serializers.ModelSerializer):
+    transaction_history = SubTransactionHistorySerializer(many=True)
+    
+    class Meta:
+        model = Subscription
+        fields = [
+            "id",
+            "subscription_name",
+            "description",
+            "active",
+            "fixed",
+            "discretionary", 
+            "currency",
+            "amount_per_frequency",
+            "frequency",
+            "frequency_detail",
+            "payment_method",
+            "category",
+            "cancellation_url",
+            "company_logo_url",
+            "transaction_history"
+        ]
+        
     # def validate_discretionary(self, discretionary):
         
     #     if type(discretionary) != bool or type(discretionary) == str:

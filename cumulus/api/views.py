@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer
+from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer
 
 
 class SubscriptionListAV(APIView):
@@ -14,7 +14,7 @@ class SubscriptionListAV(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = SubscriptionSerializer(data=request.data)
+        serializer = CreateSubscriptionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
