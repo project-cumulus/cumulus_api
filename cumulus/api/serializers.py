@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Subscription, SubscriptionTransactionHistory
+from api.models import Subscription, SubscriptionTransactionHistory, ChaseTransaction
 from decimal import *
 
 class SubTransactionHistorySerializer(serializers.ModelSerializer):
@@ -111,6 +111,11 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             "company_logo_url",
             "transaction_history"
         ]
+
+class ChaseTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChaseTransaction
+        fields = "__all__"
         
     # def validate_discretionary(self, discretionary):
         

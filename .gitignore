@@ -2,3 +2,4 @@ cenv/
 __pycache__
 .env
 db.sqlite3
+20231008.CSV

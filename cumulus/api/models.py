@@ -29,3 +29,11 @@ class SubscriptionTransactionHistory(models.Model):
         def __str__(self):
             return '%d: %s' % (self.amount, self.date_paid)
 
+
+class ChaseTransaction(models.Model):
+    debit = models.CharField(max_length=20)
+    posting_date = models.DateField()
+    description = models.CharField(max_length=250)
+    amount = models.DecimalField(max_digits=20, decimal_places=2)
+    type = models.CharField(max_length=20)
+    balance = models.DecimalField(max_digits=20, decimal_places=2)

@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from api.models import Subscription, SubscriptionTransactionHistory
+from api.models import Subscription, SubscriptionTransactionHistory, ChaseTransaction
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer
+from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, ChaseTransactionSerializer
 
 
 class SubscriptionListAV(APIView):
@@ -59,4 +59,17 @@ class SubTransactionHistoryListAV(APIView):
             return Response(serializer.data)
         else: 
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class ChaseTransactionListAV(APIView):
+    def get(self, request):
+        transactions = ChaseTransaction.objects.all()
+        serializer = ChaseTransactionSerializer(transactions, many=True)
+        return Response(serializer.data)
     
+    def post(self, request):
+        serializer = ChaseTransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
