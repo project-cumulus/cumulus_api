@@ -3,3 +3,5 @@ __pycache__
 .env
 db.sqlite3
 20231008.CSV
+fixtures/
+data/

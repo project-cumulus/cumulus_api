@@ -1,7 +1,7 @@
 import os
 import csv
 import requests
-url = 'http://localhost:8000/subscriptions/chase_transactions/'
+url = 'http://localhost:8000/cumulus/transactions/'
 
 bank_accounts = {"Chase2020", "Chase5999"}
 credit_cards = {"Chase7777"}
