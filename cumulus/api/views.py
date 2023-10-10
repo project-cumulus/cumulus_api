@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from api.models import Subscription, SubscriptionTransactionHistory, ChaseTransaction
+from api.models import Subscription, SubscriptionTransactionHistory, Transaction, Account
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, ChaseTransactionSerializer
+from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, TransactionSerializer, AccountSerializer
 
 
 class SubscriptionListAV(APIView):
@@ -60,16 +60,39 @@ class SubTransactionHistoryListAV(APIView):
         else: 
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-class ChaseTransactionListAV(APIView):
+class TransactionListAV(APIView):
     def get(self, request):
-        transactions = ChaseTransaction.objects.all()
-        serializer = ChaseTransactionSerializer(transactions, many=True)
+        transactions = Transaction.objects.all()
+        serializer = TransactionSerializer(transactions, many=True)
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = ChaseTransactionSerializer(data=request.data)
+        serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else: 
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+class AccountListAV(APIView):
+    def get(self, request):
+        accounts = Account.objects.all()
+        serializer = AccountSerializer(accounts, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+    def patch(self, request):
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    

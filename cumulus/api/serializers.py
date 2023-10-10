@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Subscription, SubscriptionTransactionHistory, ChaseTransaction
+from api.models import Subscription, Account, SubscriptionTransactionHistory, Transaction
 from decimal import *
 
 class SubTransactionHistorySerializer(serializers.ModelSerializer):
@@ -112,29 +112,14 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             "transaction_history"
         ]
 
-class ChaseTransactionSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ChaseTransaction
+        model = Transaction
         fields = "__all__"
         
-    # def validate_discretionary(self, discretionary):
         
-    #     if type(discretionary) != bool or type(discretionary) == str:
-    #         raise serializers.ValidationError("Discretionary field must be a boolean")
-        
-    #     return discretionary
-        
-
-    # def validate_fixed(self, fixed):
-    #     if type(fixed) != bool or type(fixed) == str:
-    #         raise serializers.ValidationError("Fixed field must be a boolean")
-    
-    #     return fixed
-        
-
-    # def validate_active(self, active):
-    #     if type(active) != bool or type(active) == str:
-    #         raise serializers.ValidationError("Active field must be a boolean")
-        
-    #     return active
+class AccountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = "__all__"
 
