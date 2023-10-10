@@ -51,9 +51,8 @@ class Transaction(models.Model):
     category = models.CharField(max_length=50, blank=True)
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     type = models.CharField(max_length=20)
-    balance = models.DecimalField(max_digits=20, decimal_places=2, blank=True)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     isRecurring = models.BooleanField(default=False)
-    subscription_id = models.ForeignKey(Subscription, related_name="subscription_transaction", blank=True, on_delete=models.SET_DEFAULT, default=None)
     account_id = models.ForeignKey(Account, related_name="account_relation", on_delete=models.SET_DEFAULT, default=None)
     
     def __str__(self):
