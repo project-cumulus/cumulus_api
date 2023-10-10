@@ -29,11 +29,33 @@ class SubscriptionTransactionHistory(models.Model):
         def __str__(self):
             return '%d: %s' % (self.amount, self.date_paid)
 
-
-class ChaseTransaction(models.Model):
-    debit = models.CharField(max_length=20)
-    posting_date = models.DateField()
+class Account(models.Model):
+    account_label = models.CharField(max_length=50)
+    account_name = models.CharField(max_length=100)
+    account_type = models.CharField(max_length=50)
+    joint = models.BooleanField(default=False)
+    financial_institution = models.CharField(max_length=50)
+    base_currency = models.CharField(max_length=3)
+    date_opened = models.DateField()
+    
+    def __str__(self):
+        return self.account_name
+    
+class Transaction(models.Model):
+    details = models.CharField(max_length=20, blank=True)
+    currency = models.CharField(max_length=3)
+    date = models.DateField()
     description = models.CharField(max_length=250)
+    payee = models.CharField(max_length=50, blank=True)
+    payor = models.CharField(max_length=50, blank=True)
+    category = models.CharField(max_length=50, blank=True)
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     type = models.CharField(max_length=20)
-    balance = models.DecimalField(max_digits=20, decimal_places=2)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, blank=True)
+    isRecurring = models.BooleanField(default=False)
+    subscription_id = models.ForeignKey(Subscription, related_name="subscription_transaction", blank=True, on_delete=models.SET_DEFAULT, default=None)
+    account_id = models.ForeignKey(Account, related_name="account_relation", on_delete=models.SET_DEFAULT, default=None)
+    
+    def __str__(self):
+        return self.description
+
