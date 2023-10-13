@@ -32,7 +32,7 @@ class SubscriptionDetailAV(APIView):
         
     def patch(self, request, subscription_id):
         subscription = Subscription.objects.get(pk=subscription_id)
-        serializer = SubscriptionSerializer(subscription, data=request.data)
+        serializer = CreateSubscriptionSerializer(subscription, data=request.data)
         print(request.data)
         if serializer.is_valid():
             serializer.save()
