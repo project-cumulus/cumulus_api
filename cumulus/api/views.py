@@ -32,7 +32,7 @@ class SubscriptionDetailAV(APIView):
         
     def patch(self, request, subscription_id):
         subscription = Subscription.objects.get(pk=subscription_id)
-        serializer = SubscriptionSerializer(subscription, data=request.data)
+        serializer = CreateSubscriptionSerializer(subscription, data=request.data)
         print(request.data)
         if serializer.is_valid():
             serializer.save()
@@ -73,6 +73,38 @@ class TransactionListAV(APIView):
             return Response(serializer.data)
         else: 
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class CreditTxListAV(APIView):
+    def get(self, request):
+        transactions = Transaction.objects.all()
+        serializer = TransactionSerializer(transactions, many=True)
+        data = serializer.data
+        credits = {}
+        
+        for tx in data:
+            if tx['details'] == "CREDIT":
+                if tx['description'] in credits:
+                    credits[tx['description']]['no_of_tx'] += 1
+                    credits[tx['description']]['total_amount'] += float(tx['amount'])
+                    
+                else:
+                    credits[tx['description']] = {
+                        'no_of_tx': 1,
+                        'total_amount': float(tx['amount'])
+                    }
+        
+        output = []
+        for payor in credits.keys():
+            credits[payor]['total_amount']= round(credits[payor]['total_amount'], 2)
+            output.append({
+                'payor': payor,
+                'no_of_tx': credits[payor]['no_of_tx'],
+                'total_amount': credits[payor]['total_amount']
+            })
+            
+        sorted_output = sorted(output, key=lambda x: x['total_amount'], reverse=True)
+        return Response(sorted_output)
+        
         
 class AccountListAV(APIView):
     def get(self, request):
