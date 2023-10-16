@@ -54,7 +54,7 @@ class CreateSubscriptionSerializer(serializers.ModelSerializer):
         return value
     
     def validate_currency(self, currency_code):
-        valid_currencies = {"USD", "AUD", "EUR", "GBP", "MXN", "JPY", "HKD", "CAD", "NZD", "RMB"}
+        valid_currencies = {"USD", "AUD", "EUR", "GBP", "MXN", "JPY", "HKD", "CAD", "NZD", "CNY"}
         
         if currency_code.upper() not in valid_currencies:
             raise serializers.ValidationError(
