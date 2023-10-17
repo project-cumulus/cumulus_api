@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Subscription, Account, SubscriptionTransactionHistory, Transaction
+from api.models import Subscription, Account, SubscriptionTransactionHistory, Transaction, Security, SecPrice
 from decimal import *
 
 class SubTransactionHistorySerializer(serializers.ModelSerializer):
@@ -123,3 +123,20 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = "__all__"
 
+class SecPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecPrice
+        fields = "__all__"
+
+class SecuritySerializer(serializers.ModelSerializer):
+    price_history = SecPriceSerializer(many=True)
+
+    class Meta:    
+        model = Security
+        fields = [
+            "symbol", "name", "currency", "time_zone", "last_refreshed", "price_history"
+        ]
+        
+        
+        
+        
