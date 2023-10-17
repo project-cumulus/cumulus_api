@@ -58,3 +58,24 @@ class Transaction(models.Model):
     def __str__(self):
         return self.description
 
+class Security(models.Model):
+    symbol = models.CharField(max_length=10)
+    name = models.CharField(max_length=200)
+    currency = models.CharField(max_length=3, blank=True)
+    time_zone = models.CharField(max_length=50)
+    last_refreshed = models.DateField()
+    
+    def __str__(self):
+        return self.name
+
+class SecPrice(models.Model):
+    security = models.ForeignKey(Security, related_name="price_history", on_delete=models.CASCADE)
+    date = models.DateField(default="2023-01-01")
+    open = models.DecimalField(max_digits=20, decimal_places=4)
+    high = models.DecimalField(max_digits=20, decimal_places=4)
+    low = models.DecimalField(max_digits=20, decimal_places=4)
+    close = models.DecimalField(max_digits=20, decimal_places=4)
+    volume = models.IntegerField()
+    
+    def __str__(self):
+        return self.close
