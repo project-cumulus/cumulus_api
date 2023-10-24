@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from api.models import Subscription, SubscriptionTransactionHistory, Transaction, Account, Security
+from api.models import Subscription, SubscriptionTransactionHistory, Transaction, Account, Security, SecPrice
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, TransactionSerializer, AccountSerializer, SecuritySerializer
+from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, TransactionSerializer, AccountSerializer, SecuritySerializer, CreateSecuritySerializer, SecPriceSerializer
 
 
 class SubscriptionListAV(APIView):
@@ -135,9 +135,23 @@ class SecurityListAV(APIView):
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = SecuritySerializer(data=request.data)
+        serializer = CreateSecuritySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else: 
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+class SecPriceListAV(APIView):
+    def get(self, request):
+        secPrices = SecPrice.objects.all()
+        serializer = SecPriceSerializer(secPrices, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = SecPriceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
