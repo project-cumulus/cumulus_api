@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import SubscriptionListAV, SubscriptionDetailAV, TransactionListAV, CreditTxListAV, SecurityListAV, SecPriceListAV
+from api.views import SubscriptionListAV, SubscriptionDetailAV, TransactionListAV, CreditTxListAV, SecurityListAV, SecPriceListAV, AssetListAV
 
 urlpatterns = [
     path('subscriptions/', SubscriptionListAV.as_view(), name="subscription-list"),
@@ -8,4 +8,6 @@ urlpatterns = [
     path('transactions/credit/', CreditTxListAV.as_view(), name="credit-transactions"),
     path('securities/', SecurityListAV.as_view(), name='security-list'),
     path('securities/prices/', SecPriceListAV.as_view(), name='security-prices'),
+    path('assets/', AssetListAV.as_view(), name="asset-list"),
+    path('assets/<int:asset_id>', AssetListAV.as_view(), name="asset-list")
 ]

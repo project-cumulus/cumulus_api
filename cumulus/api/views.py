@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from api.models import Subscription, SubscriptionTransactionHistory, Transaction, Account, Security, SecPrice
+from api.models import Subscription, SubscriptionTransactionHistory, Transaction, Account, Security, SecPrice, Asset
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, TransactionSerializer, AccountSerializer, SecuritySerializer, CreateSecuritySerializer, SecPriceSerializer
+from api.serializers import SubscriptionSerializer, SubTransactionHistorySerializer, CreateSubscriptionSerializer, TransactionSerializer, AccountSerializer, SecuritySerializer, CreateSecuritySerializer, SecPriceSerializer, AssetSerializer
 
 
 class SubscriptionListAV(APIView):
@@ -153,5 +153,29 @@ class SecPriceListAV(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+class AssetListAV(APIView):
+    def get(self, request):
+        assets = Asset.objects.all()
+        serializer = AssetSerializer(assets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = AssetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    
+    def patch(self, request, asset_id):
+        asset = Asset.objects.get(pk=asset_id)
+        serializer = AssetSerializer(asset, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

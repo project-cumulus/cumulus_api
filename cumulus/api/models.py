@@ -42,18 +42,23 @@ class Account(models.Model):
         return self.account_name
     
 class Transaction(models.Model):
-    details = models.CharField(max_length=20, blank=True)
     currency = models.CharField(max_length=3)
     date = models.DateField()
     description = models.CharField(max_length=250)
     payee = models.CharField(max_length=50, blank=True)
     payor = models.CharField(max_length=50, blank=True)
     category = models.CharField(max_length=50, blank=True)
-    amount = models.DecimalField(max_digits=20, decimal_places=2)
     type = models.CharField(max_length=20)
     balance = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     isRecurring = models.BooleanField(default=False)
     account_id = models.ForeignKey(Account, related_name="account_relation", on_delete=models.SET_DEFAULT, default=None)
+    # isShared = models.BooleanField(default=False)
+    # isRefunded = models.BooleanField(default=False)
+    # isExcluded = models.BooleanField(default=False)
+    details = models.CharField(max_length=20, blank=True)
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    # amount_gross = models.DecimalField(max_digits=20, decimal_places=2)
+    # amount_net = models.DecimalField(max_digits=20, decimal_places=2)
     
     def __str__(self):
         return self.description
@@ -79,3 +84,19 @@ class SecPrice(models.Model):
     
     def __str__(self):
         return self.close
+    
+
+class Asset(models.Model):
+    currency = models.CharField(max_length=3)
+    owner = models.CharField(max_length=50)
+    value = models.DecimalField(max_digits=20, decimal_places=2)
+    offset_value = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    date = models.DateField()
+    date_opened = models.DateField()
+    date_closed = models.DateTimeField(blank=True, null=True)
+    asset_type = models.CharField(max_length=50)
+    asset_class = models.CharField(max_length=50)
+    account_name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.account_name
